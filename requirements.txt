@@ -1,0 +1,12 @@
+crewai[tools]
+openai
+chromadb
+ragas
+datasets
+pandas
+sqlalchemy
+python-dotenv
+tiktoken
+fastapi
+uvicorn
+litellm
