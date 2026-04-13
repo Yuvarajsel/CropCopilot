@@ -1,13 +1,5 @@
 # 🌾 CropCopilot — AI-Powered Agricultural Intelligence System
 
-<p align="center">
-  <img src="https://img.shields.io/badge/Python-3.10%2B-blue?style=for-the-badge&logo=python" />
-  <img src="https://img.shields.io/badge/FastAPI-0.100%2B-009688?style=for-the-badge&logo=fastapi" />
-  <img src="https://img.shields.io/badge/CrewAI-Agentic-orange?style=for-the-badge" />
-  <img src="https://img.shields.io/badge/NVIDIA_NIM-LLM-76B900?style=for-the-badge&logo=nvidia" />
-  <img src="https://img.shields.io/badge/ChromaDB-VectorStore-blueviolet?style=for-the-badge" />
-  <img src="https://img.shields.io/badge/Ragas-Evaluation-red?style=for-the-badge" />
-</p>
 
 > **CropCopilot** is an AI-powered agricultural intelligence system that combines **Retrieval-Augmented Generation (RAG)**, **Text-to-SQL**, and **Agentic Orchestration** via CrewAI to deliver data-driven, contextual farming insights through a modern web interface.
 
