@@ -30,9 +30,18 @@ def get_embeddings(texts):
     )
     return [e.embedding for e in response.data]
 
-class NvidiaEmbeddingFunction:
-    def __call__(self, input):
+from chromadb import EmbeddingFunction, Documents, Embeddings
+
+class NvidiaEmbeddingFunction(EmbeddingFunction[Documents]):
+    def __init__(self):
+        pass
+
+    def name(self) -> str:
+        return "nvidia_embedding_function"
+
+    def __call__(self, input: Documents) -> Embeddings:
         return get_embeddings(input)
+
 
 def setup_vector_store():
     client = chromadb.PersistentClient(path=CHROMA_PERSIST_DIR)
@@ -102,4 +111,6 @@ def retrieve_agri_info(query: str) -> str:
 
 if __name__ == "__main__":
     print("Testing Native Vector Store Initialization...")
-    retrieve_agri_info("Which crops are suitable for sandy soil conditions?")
+    res = retrieve_agri_info.run(query="Which crops are suitable for sandy soil conditions?")
+    print("Result snippet:", res[:200] if res else "None")
+
