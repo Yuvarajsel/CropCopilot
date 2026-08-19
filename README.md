@@ -14,6 +14,7 @@
 - [Project Structure](#-project-structure)
 - [Setup & Installation](#-setup--installation)
 - [Running the Application](#-running-the-application)
+- [Production Deployment](#-production-deployment)
 - [Evaluation Pipeline](#-evaluation-pipeline)
 - [API Reference](#-api-reference)
 - [Dataset](#-dataset)
@@ -175,6 +176,24 @@ python main.py
 Then open your browser at **[http://127.0.0.1:8000](http://127.0.0.1:8000)**.
 
 The vector store initializes automatically on first query (ChromaDB indexes the documents).
+
+---
+
+## 🌐 Production Deployment
+
+CropCopilot is pre-configured for instant deployment on multiple cloud and container platforms. See the complete **[Deployment Guide (DEPLOYMENT.md)](DEPLOYMENT.md)** for detailed instructions.
+
+### Quick Deploy Options:
+
+| Platform | Type | Quick Command / Configuration |
+|---|---|---|
+| **Docker Compose** | VPS / Self-Hosted | `docker compose up -d --build` |
+| **Render** | Cloud Web Service | Connect repo → Uses [`render.yaml`](render.yaml) automatically |
+| **Railway** | Cloud Container | Deploy from GitHub → Uses [`railway.json`](railway.json) & [`Dockerfile`](Dockerfile) |
+| **Fly.io** | Edge Containers | `fly launch` & `fly deploy` (uses [`fly.toml`](fly.toml)) |
+| **Hugging Face** | AI Spaces | Create Docker Space & add `NVIDIA_API_KEY` secret |
+
+> 📖 **Full Instructions:** Check out [DEPLOYMENT.md](DEPLOYMENT.md) for step-by-step guides, environment variable setups, health checks, and VPS configuration.
 
 ---
 
