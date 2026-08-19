@@ -9,10 +9,11 @@ This guide provides end-to-end instructions for deploying **CropCopilot** across
 - [Prerequisites](#-prerequisites)
 - [Option 1: Deploy on Render (Recommended / Free Tier)](#option-1-deploy-on-render-recommended--free-tier)
 - [Option 2: Deploy on Railway (1-Click Docker)](#option-2-deploy-on-railway-1-click-docker)
-- [Option 3: Deploy with Docker & Docker Compose (VPS / Self-Hosted)](#option-3-deploy-with-docker--docker-compose-vps--self-hosted)
-- [Option 4: Deploy on Fly.io (Persistent Disk Edge)](#option-4-deploy-on-flyio-persistent-disk-edge)
-- [Option 5: Deploy on Hugging Face Spaces](#option-5-deploy-on-hugging-face-spaces)
-- [Option 6: Google Cloud Run / AWS App Runner](#option-6-google-cloud-run--aws-app-runner)
+- [Option 3: Deploy on Vercel (Serverless)](#option-3-deploy-on-vercel-serverless)
+- [Option 4: Deploy with Docker & Docker Compose (VPS / Self-Hosted)](#option-4-deploy-with-docker--docker-compose-vps--self-hosted)
+- [Option 5: Deploy on Fly.io (Persistent Disk Edge)](#option-5-deploy-on-flyio-persistent-disk-edge)
+- [Option 6: Deploy on Hugging Face Spaces](#option-6-deploy-on-hugging-face-spaces)
+- [Option 7: Google Cloud Run / AWS App Runner](#option-7-google-cloud-run--aws-app-runner)
 - [⚙️ Environment Variables Reference](#️-environment-variables-reference)
 - [🩺 Health Checks & Verification](#-health-checks--verification)
 - [🛠 Troubleshooting & FAQ](#-troubleshooting--faq)
@@ -77,7 +78,44 @@ Railway automatically detects the `Dockerfile` and builds a production container
 
 ---
 
-## Option 3: Deploy with Docker & Docker Compose (VPS / Self-Hosted)
+## Option 3: Deploy on Vercel (Serverless)
+
+CropCopilot includes [`vercel.json`](vercel.json) and [`api/index.py`](api/index.py) for Vercel Python serverless deployment.
+
+### Method A: Deploy via Vercel Dashboard (Fastest)
+
+1. Go to **[vercel.com](https://vercel.com)** and log in with your GitHub account.
+2. Click **"Add New..."** → **"Project"**.
+3. Import your **`CropCopilot`** repository.
+4. In the Project Configuration:
+   - **Framework Preset**: Other (automatically detected from `vercel.json`).
+   - **Root Directory**: `./` (leave default).
+5. Expand **"Environment Variables"**:
+   - Name: `NVIDIA_API_KEY`
+   - Value: `nvapi-your-nvidia-nim-api-key`
+6. Click **"Deploy"**.
+7. Vercel will bundle the FastAPI application and deploy it globally on serverless edge functions.
+
+### Method B: Deploy using Vercel CLI
+
+```bash
+# 1. Install Vercel CLI
+npm install -g vercel
+
+# 2. Log in and deploy
+vercel
+
+# 3. Add NVIDIA_API_KEY when prompted or via CLI
+vercel env add NVIDIA_API_KEY
+vercel --prod
+```
+
+> [!NOTE]
+> Vercel functions have a default 10-second timeout on the free (Hobby) tier. Complex CrewAI reasoning runs that execute both SQL + RAG queries may take 10-15s. For production AI agents, long-running web services like Render, Railway, or Docker containers are recommended if you exceed the serverless timeout.
+
+---
+
+## Option 4: Deploy with Docker & Docker Compose (VPS / Self-Hosted)
 
 For deployment on your own Linux server (Ubuntu/Debian on AWS EC2, DigitalOcean Droplet, Linode, Hetzner, etc.):
 

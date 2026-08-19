@@ -187,9 +187,10 @@ CropCopilot is pre-configured for instant deployment on multiple cloud and conta
 
 | Platform | Type | Quick Command / Configuration |
 |---|---|---|
-| **Docker Compose** | VPS / Self-Hosted | `docker compose up -d --build` |
+| **Vercel** | Serverless Edge | Connect repo → Uses [`vercel.json`](vercel.json) & [`api/index.py`](api/index.py) |
 | **Render** | Cloud Web Service | Connect repo → Uses [`render.yaml`](render.yaml) automatically |
 | **Railway** | Cloud Container | Deploy from GitHub → Uses [`railway.json`](railway.json) & [`Dockerfile`](Dockerfile) |
+| **Docker Compose** | VPS / Self-Hosted | `docker compose up -d --build` |
 | **Fly.io** | Edge Containers | `fly launch` & `fly deploy` (uses [`fly.toml`](fly.toml)) |
 | **Hugging Face** | AI Spaces | Create Docker Space & add `NVIDIA_API_KEY` secret |
 

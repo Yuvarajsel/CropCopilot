@@ -11,10 +11,16 @@ import uvicorn
 from agri_agent import run_agri_agent, run_agri_agent_async
 from data_ingestion import ingest_data
 
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+STATIC_DIR = os.path.join(BASE_DIR, "static")
+DATA_DIR = os.environ.get("DATA_DIR", os.path.join("/tmp", "data") if os.environ.get("VERCEL") else os.path.join(BASE_DIR, "data"))
+
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    os.makedirs("data", exist_ok=True)
-    if not os.path.exists("data/agriculture.db") or not os.path.exists("data/rag_documents.json"):
+    os.makedirs(DATA_DIR, exist_ok=True)
+    db_file = os.path.join(DATA_DIR, "agriculture.db")
+    rag_file = os.path.join(DATA_DIR, "rag_documents.json")
+    if not os.path.exists(db_file) or not os.path.exists(rag_file):
         print("Data files missing on startup. Running initial data ingestion...")
         try:
             ingest_data()
@@ -22,7 +28,7 @@ async def lifespan(app: FastAPI):
         except Exception as e:
             print(f"Warning: Data ingestion during startup encountered an issue: {e}")
     else:
-        print("Existing data files found in ./data.")
+        print(f"Existing data files found in {DATA_DIR}.")
     yield
 
 app = FastAPI(
@@ -42,19 +48,22 @@ app.add_middleware(
 )
 
 # Ensure the static directory exists
-os.makedirs("static", exist_ok=True)
+os.makedirs(STATIC_DIR, exist_ok=True)
 
 # Mount the static directory to serve HTML, CSS, JS
-app.mount("/static", StaticFiles(directory="static"), name="static")
+if os.path.exists(STATIC_DIR):
+    app.mount("/static", StaticFiles(directory=STATIC_DIR), name="static")
 
 class QueryRequest(BaseModel):
     query: str
 
 @app.get("/health")
 async def health_check():
-    """Health check endpoint for cloud load balancers, Render, Fly.io, and Docker probes."""
-    has_db = os.path.exists("data/agriculture.db")
-    has_docs = os.path.exists("data/rag_documents.json")
+    """Health check endpoint for cloud load balancers, Vercel, Render, Fly.io, and Docker probes."""
+    db_file = os.path.join(DATA_DIR, "agriculture.db")
+    rag_file = os.path.join(DATA_DIR, "rag_documents.json")
+    has_db = os.path.exists(db_file)
+    has_docs = os.path.exists(rag_file)
     has_key = bool(os.environ.get("NVIDIA_API_KEY"))
     return JSONResponse(
         content={
@@ -71,8 +80,11 @@ async def health_check():
 
 @app.get("/", response_class=HTMLResponse)
 async def get_index():
-    with open("static/index.html", "r", encoding="utf-8") as f:
-        return f.read()
+    index_path = os.path.join(STATIC_DIR, "index.html")
+    if os.path.exists(index_path):
+        with open(index_path, "r", encoding="utf-8") as f:
+            return f.read()
+    return HTMLResponse("<h1>CropCopilot API is running</h1>")
 
 @app.post("/api/query")
 async def handle_query(request: QueryRequest):

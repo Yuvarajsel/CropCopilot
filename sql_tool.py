@@ -7,7 +7,9 @@ from crewai.tools import tool
 # Load environment variables
 load_dotenv()
 
-DB_PATH = "data/agriculture.db"
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+DATA_DIR = os.environ.get("DATA_DIR", os.path.join("/tmp", "data") if os.environ.get("VERCEL") else os.path.join(BASE_DIR, "data"))
+DB_PATH = os.path.join(DATA_DIR, "agriculture.db")
 
 def get_nvidia_client():
     if 'NVIDIA_API_KEY' not in os.environ:
