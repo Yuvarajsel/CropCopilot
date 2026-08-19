@@ -4,13 +4,8 @@ import os
 import sqlite3
 import json
 
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-DATA_DIR = os.environ.get("DATA_DIR", os.path.join("/tmp", "data") if os.environ.get("VERCEL") else os.path.join(BASE_DIR, "data"))
-
 def ingest_data():
-    os.makedirs(DATA_DIR, exist_ok=True)
-    db_path = os.path.join(DATA_DIR, "agriculture.db")
-    rag_file = os.path.join(DATA_DIR, "rag_documents.json")
+    os.makedirs("data", exist_ok=True)
     
     print("Downloading dataset Mahesh2841/Agriculture...")
     dataset = load_dataset("Mahesh2841/Agriculture")
@@ -28,6 +23,7 @@ def ingest_data():
     print(df.head(2))
     
     # 1. Save to SQLite for Text-to-SQL
+    db_path = "data/agriculture.db"
     conn = sqlite3.connect(db_path)
     # Using 'agriculture_data' as table name
     df.to_sql("agriculture_data", conn, if_exists="replace", index=False)
@@ -54,10 +50,10 @@ def ingest_data():
             "metadata": {"source": "Mahesh2841/Agriculture", "row_index": i}
         })
     
-    with open(rag_file, "w", encoding='utf-8') as f:
+    with open("data/rag_documents.json", "w", encoding='utf-8') as f:
         json.dump(documents, f, indent=2)
     
-    print(f"Prepared {len(documents)} textual documents for RAG in {rag_file}")
+    print(f"Prepared {len(documents)} textual documents for RAG in data/rag_documents.json")
 
 if __name__ == "__main__":
     ingest_data()

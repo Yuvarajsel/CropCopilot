@@ -8,11 +8,8 @@ from crewai.tools import tool
 # Load environment variables
 load_dotenv()
 
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-DATA_DIR = os.environ.get("DATA_DIR", os.path.join("/tmp", "data") if os.environ.get("VERCEL") else os.path.join(BASE_DIR, "data"))
-
-CHROMA_PERSIST_DIR = os.path.join(DATA_DIR, "chroma_db_native")
-DATA_FILE = os.path.join(DATA_DIR, "rag_documents.json")
+CHROMA_PERSIST_DIR = "data/chroma_db_native"
+DATA_FILE = "data/rag_documents.json"
 
 def get_nvidia_client():
     if 'NVIDIA_API_KEY' not in os.environ:
