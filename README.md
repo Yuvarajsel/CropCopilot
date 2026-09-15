@@ -5,21 +5,6 @@
 
 ---
 
-## 📋 Table of Contents
-
-- [Overview](#-overview)
-- [Architecture](#-architecture)
-- [Features](#-features)
-- [Tech Stack](#-tech-stack)
-- [Project Structure](#-project-structure)
-- [Setup & Installation](#-setup--installation)
-- [Running the Application](#-running-the-application)
-- [Evaluation Pipeline](#-evaluation-pipeline)
-- [API Reference](#-api-reference)
-- [Dataset](#-dataset)
-- [How It Works](#-how-it-works)
-
----
 
 ## 🌟 Overview
 
